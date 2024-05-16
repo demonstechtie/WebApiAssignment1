@@ -1,100 +1,117 @@
-// module.exports = {
-//     // Explain what function A does
-//     functionA() {
-//         return 1+2;
-//     },
-//     // Explain what function B does
-//     functionB() {
-//         console.log("Hello function B");
-//     },
-    
-// }
+let movies = [
+  {
+    id: 1,
+    title: "Inception",
+    genre: "Sci-Fi",
+    director: "Christopher Nolan",
+    releaseYear: 2010,
+    description: "A thief who steals corporate secrets through the use of dream-sharing technology."
+  },
+  {
+    id: 2,
+    title: "The Dark Knight",
+    genre: "Action",
+    director: "Christopher Nolan",
+    releaseYear: 2008,
+    description: "Batman sets out to dismantle the remaining criminal organizations that plague Gotham."
+  },
+  {
+    id: 3,
+    title: "Crouching Tiger, Hidden Dragon",
+    genre: "Action",
+    director: "Ang Lee",
+    releaseYear: 2000,
+    description: "A young Chinese warrior steals a sword from a famed swordsman and then escapes into a world of romantic adventure."
+  }
+];
 
-
-// Simulating a database with an array to store movie information
-let movies = [];
-
-// Adds a new movie to the collection
+// Adds a new movie to the array
 function addMovie(title, genre, director, releaseYear, description) {
-  // Create a new movie object with a unique ID and the provided details
+  // Check if the movie already exists
+  const movieExists = movies.some(movie => movie.title === title && movie.releaseYear === releaseYear);
+  if (movieExists) {
+    return "Movie already exists";
+  }
+
+  // Create a new movie item
   const movie = {
-    id: movies.length + 1,  // Unique ID for the movie
+    id: movies.length + 1, // Primary key, unique id
     title: title,
     genre: genre,
     director: director,
     releaseYear: releaseYear,
     description: description
   };
-  // Add the new movie to the movies array
+  // Push the movie and add it to the movies array
   movies.push(movie);
-  // Return the added movie object
-  return movie;
+  // Print success message
+  console.log(`Movie "${title}" is added.`);
 }
 
-// Searches for movies by genre
-function searchMoviesByGenre(genre) {
-  // Filter the movies array to find movies that match the specified genre (case insensitive)
-  return movies.filter(function(movie) {
-    return movie.genre.toLowerCase() === genre.toLowerCase();
-  });
+// Search for movies with term
+function searchMovies(search) {
+  // Filter the movies array 
+  const foundMovies = movies.filter(movie => 
+    movie.title.toLowerCase().includes(search.toLowerCase()) ||
+    movie.genre.toLowerCase().includes(search.toLowerCase()) ||
+    movie.director.toLowerCase().includes(search.toLowerCase())
+  );
+  return foundMovies.length > 0 ? foundMovies : "No movies found matching the search term";
 }
 
-// Reads the details of a movie by its ID
-function readMovieDetails(id) {
-  // Find the movie in the movies array that has the specified ID
-  for (let i = 0; i < movies.length; i++) {
-    if (movies[i].id === id) {
-      return movies[i];
-    }
-  }
-  // Return null if no movie with the specified ID is found
-  return null;
+// Gets the details of a movie by its ID
+function getMovieDetails(id) {
+  // Find the movie by id
+  const movie = movies.find(movie => movie.id === id);
+  return movie || "Movie does not exist";
 }
 
-// Updates the details of a movie
+// Update details
 function updateMovieDetails(id, updatedDetails) {
-  // Find the movie in the movies array that has the specified ID
-  for (let i = 0; i < movies.length; i++) {
-    if (movies[i].id === id) {
-      // Update the movie's details with the provided updatedDetails
-      movies[i].title = updatedDetails.title || movies[i].title;
-      movies[i].genre = updatedDetails.genre || movies[i].genre;
-      movies[i].director = updatedDetails.director || movies[i].director;
-      movies[i].releaseYear = updatedDetails.releaseYear || movies[i].releaseYear;
-      movies[i].description = updatedDetails.description || movies[i].description;
-      // Return the updated movie object
-      return movies[i];
-    }
+  // Find the movie with selected ID
+  const movie = movies.find(movie => movie.id === id);
+  if (movie) {
+    // Update movie details 
+    movie.title = updatedDetails.title || movie.title;
+    movie.genre = updatedDetails.genre || movie.genre;
+    movie.director = updatedDetails.director || movie.director;
+    movie.releaseYear = updatedDetails.releaseYear || movie.releaseYear;
+    movie.description = updatedDetails.description || movie.description;
+    // Return the updated movie 
+    return movie;
   }
-  // Return null if no movie with the specified ID is found
-  return null;
+  // Return a message if it does not exist
+  return "Movie does not exist";
 }
 
 // Deletes a movie by its ID
 function deleteMovie(id) {
-  // Find the index of the movie in the movies array that has the specified ID
-  for (let i = 0; i < movies.length; i++) {
-    if (movies[i].id === id) {
-      // Remove the movie from the movies array
-      movies.splice(i, 1);
-      // Return true to indicate that the movie was successfully deleted
-      return true;
-    }
+  // Find the movie in the movies array that has the specified ID
+  const movieIndex = movies.findIndex(movie => movie.id === id);
+  if (movieIndex !== -1) {
+    // Remove the movie from the movies array
+    const [deletedMovie] = movies.splice(movieIndex, 1);
+
+    // Print message
+    console.log(`Movie "${deletedMovie.title}" is deleted.`);
+
+    // Return true to indicate that the movie was successfully deleted
+    return true;
   }
-  // Return false if no movie with the specified ID is found
-  return false;
+  // Return a message if no movie with the specified ID is found
+  return "Movie does not exist";
 }
 
 // Exporting the functions as a module
 module.exports = {
-  // Function to add a new movie to the collection
+  // Function to add a new movie to the array
   addMovie,
 
-  // Function to search for movies by genre
-  searchMoviesByGenre,
+  // Function to search for movies 
+  searchMovies,
 
-  // Function to read the details of a movie by its ID
-  readMovieDetails,
+  // Function to get the details of a movie by its ID
+  getMovieDetails,
 
   // Function to update the details of a movie
   updateMovieDetails,
