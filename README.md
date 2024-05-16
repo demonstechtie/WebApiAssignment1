@@ -52,4 +52,4 @@ console.log("Remaining movies after deletion:", movieManager.searchMovies("")); 
 ```
 
 ## Additional:
-1.There are hardcoded items in the array. You can change the items in the hardcoded array.
+1.There are hardcoded movie items in the array. You can change the movies in the hardcoded array.
